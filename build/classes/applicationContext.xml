@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	
+	
+	
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"></property>
+		<property name="username" value="scott"></property>
+		<property name="password" value="tiger"></property>
+		<!-- 连接池启动时的初始值 -->
+		<property name="initialSize" value="30"></property>
+		<!-- 连接池的最大值 -->
+		<property name="maxTotal" value="500"></property>
+		<!-- 最大空闲值 -->
+		<property name="maxIdle" value="2"></property>
+		<!-- 最小空闲值 -->
+		<property name="minIdle" value="1"></property>
+	</bean>
+	
+	
+	
+	
+	<!-- 配置会话工厂 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	<!-- 设置数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 接管hibernate对象映射文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/domain/Employee.hbm.xml</value>
+				<value>com/domain/Department.hbm.xml</value>
+			</list>			
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+				hibernate.format_sql=true
+			</value>		
+		</property>
+		
+	</bean>
+	
+	
+	
+	<bean id="employeeService" class="com.service.imp.EmployeeService">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="departmentService" class="com.service.imp.DepartmentService">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	
+	
+	
+	<!-- 配置Action -->
+	<bean id="myLoginAction" class="com.web.action.LoginAction" scope="prototype">
+		<property name="employeeServiceInter" ref="employeeService"></property>
+	</bean>
+	<bean id="myEmployeeAction" class="com.web.action.EmployeeAction" scope="prototype">
+		<property name="employeeServiceInter" ref="employeeService"></property>
+		<property name="departmentServiceInter" ref="departmentService"></property>
+	</bean>
+	
+	<!-- 配置事物管理器，统一管理事物 -->
+	<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 启用事物注解 -->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

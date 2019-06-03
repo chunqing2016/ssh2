@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation"  value="true"></constant>
+
+	
+
+
+
+	<!-- <constant name="struts.objectFactory" value="spring"></constant> -->
+
+	<package name="ssh" extends="struts-default">
+	
+		<global-allowed-methods>addEmp,goListEmp,delEmp,goMainFrame</global-allowed-methods>
+	
+		
+		<action name="loginAction" class="myLoginAction">
+			<result name="success">/mainFrame.jsp</result>
+			<result name="fail">/login.jsp</result>
+			<result name="err">/err.jsp</result>
+		</action>
+		<action name="employeeAction" class="myEmployeeAction">
+			<result name="goAddEmpUi">/addEmpUi.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="ok">/ok.jsp</result>
+			<result name="listEmp">/listEmp.jsp</result>
+			<result name="operok">/operok.jsp</result>
+			<result name="opererr">/opererr.jsp</result>
+			
+			
+			
+		</action>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</package>
+	
+</struts>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
